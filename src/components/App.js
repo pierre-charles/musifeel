@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
+import '../stylesheets/App.scss';
 import * as faceapi from 'face-api.js';
+import Emoji from 'react-emojis'
 
 class App extends Component {
   constructor(props) {
@@ -51,10 +52,11 @@ class App extends Component {
   render() {
     return (
       <div className='col-11 col-lg-6 col-md-8 container bg-light mt-5 mb-5 p-3 shadow'>
-        <h1 className='h3 py-3 text-secondary text-center'><i className='fas fa-music pr-2'/>Welcome to rhythmicFeel</h1>
+        <h1 className='h3 py-3 text-secondary text-center'>rhythmicFeel <Emoji emoji="musical-note"/>
+</h1>
         <div className='video-container'>
-          <video onLoadedMetadata={ () => { this.simulate() }} width='700' height='500' autoPlay muted playsInline ref={this.video}></video>
-          <canvas ref={this.canvas} className="overlay" />
+          <video className='col-12' onLoadedMetadata={ () => { this.simulate() }} width='700' height='500' autoPlay muted playsInline ref={this.video}></video>
+          <canvas className='col-12 overlay' ref={this.canvas}/>
         </div>
         <div className='py-3 text-center'>
           <p>Your mood is: {this.state.emotion}</p>

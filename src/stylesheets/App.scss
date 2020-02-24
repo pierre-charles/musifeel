@@ -1,0 +1,13 @@
+body {
+  background: linear-gradient(90deg, #d53369 0%, #daae51 100%) no-repeat center center fixed;
+}
+
+.video-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay{
+  position: absolute;
+}
