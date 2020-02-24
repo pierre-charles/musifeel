@@ -20,12 +20,18 @@ class App extends Component {
     ]).then(this.startVideo)
   }
 
+  // startVideo = () => {
+  //   navigator.mediaDevices.getUserMedia(
+  //     { audio: true, video: { facingMode: "user" } },
+  //     stream => this.video.current.srcObject = stream,
+  //     err => console.error(err)
+  //   )
+  // }
+
   startVideo = () => {
-    navigator.getUserMedia(
-      { video: {} },
-      stream => this.video.current.srcObject = stream,
-      err => console.error(err)
-    )
+    navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user' }
+    }).then(stream => this.video.current.srcObject = stream)
   }
 
   simulate = () => {
