@@ -36,35 +36,27 @@ class App extends Component {
     this.canvas.current.getContext('2d').clearRect(0, 0, this.canvas.current.width, this.canvas.current.height)
 
     faceapi.draw.drawFaceLandmarks(this.canvas.current, resizedDetections)
-    // faceapi.draw.drawFaceExpressions(this.canvas.current, resizedDetections)
-
     if (resizedDetections && resizedDetections.length > 0) {
-      const expObject = resizedDetections
-      const exp = expObject[0].expressions
-      const maxValue = Math.max(...Object.values(exp));
-      const emotion = Object.keys(exp).filter(
-          item => exp[item] === maxValue
+      const detection = resizedDetections[0].expressions
+      const maxValue = Math.max(...Object.values(detection));
+      const emotion = Object.keys(detection).filter(
+          item => detection[item] === maxValue
       )
       this.setState({
         emotion: emotion.toString()
       })
-      // console.log('DETECTION OBJECT => ', expObject)
-      // console.log('EXPRESSIONS => ', exp)
-      // console.log('SORTED', maxValue)
-      // console.log('EMOTION', emotions)
-      }
-    }, 100)
+    }}, 100)
   }
 
   render() {
     return (
       <div className='col-11 col-lg-6 col-md-8 container bg-light mt-5 mb-5 p-3 shadow'>
-        <h1 className='h3 pt-3 text-secondary text-center'><i className='fas fa-music pr-2'/>Welcome to rhythmicFeel!</h1>
+        <h1 className='h3 py-3 text-secondary text-center'><i className='fas fa-music pr-2'/>Welcome to rhythmicFeel</h1>
         <div className='video-container'>
-          <video onLoadedMetadata={ () => { this.simulate() }} width='600' height='530' autoPlay muted playsInline ref={this.video}></video>
+          <video onLoadedMetadata={ () => { this.simulate() }} width='700' height='500' autoPlay muted playsInline ref={this.video}></video>
           <canvas ref={this.canvas} className="overlay" />
         </div>
-        <div className='text-center'>
+        <div className='py-3 text-center'>
           <p>Your mood is: {this.state.emotion}</p>
         </div>
       </div>
