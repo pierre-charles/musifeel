@@ -20,14 +20,6 @@ class App extends Component {
     ]).then(this.startVideo)
   }
 
-  // startVideo = () => {
-  //   navigator.mediaDevices.getUserMedia(
-  //     { audio: true, video: { facingMode: "user" } },
-  //     stream => this.video.current.srcObject = stream,
-  //     err => console.error(err)
-  //   )
-  // }
-
   startVideo = () => {
     navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'user' }
@@ -38,11 +30,11 @@ class App extends Component {
     const displaySize = { width: this.video.current.width, height: this.video.current.height }
     faceapi.matchDimensions(this.canvas.current, displaySize)
     setInterval(async () => {
-      const detections = await faceapi.detectAllFaces(this.video.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+    const detections = await faceapi.detectAllFaces(this.video.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
     const resizedDetections = faceapi.resizeResults(detections, displaySize, true)
     this.canvas.current.getContext('2d').clearRect(0, 0, this.canvas.current.width, this.canvas.current.height)
-
-    faceapi.draw.drawFaceLandmarks(this.canvas.current, resizedDetections)
+    // faceapi.draw.drawFaceLandmarks(this.canvas.current, resizedDetections)
+    faceapi.draw.drawDetections(this.canvas.current, resizedDetections)
     if (resizedDetections && resizedDetections.length > 0) {
       const detection = resizedDetections[0].expressions
       const maxValue = Math.max(...Object.values(detection));
@@ -61,8 +53,8 @@ class App extends Component {
         <h1 className='h3 py-3 text-secondary text-center'>rhythmicFeel <Emoji emoji="musical-note"/>
 </h1>
         <div className='video-container'>
-          <video className='col-12' onLoadedMetadata={ () => { this.simulate() }} width='700' height='500' autoPlay muted playsInline ref={this.video}></video>
-          <canvas className='col-12 overlay' ref={this.canvas}/>
+          <video className='video-container col-12' onLoadedMetadata={ () => { this.simulate() }} width='700' height='500' autoPlay muted playsInline ref={this.video}></video>
+          <canvas className='overlay col-12' ref={this.canvas}/>
         </div>
         <div className='py-3 text-center'>
           <p>Your mood is: {this.state.emotion}</p>
