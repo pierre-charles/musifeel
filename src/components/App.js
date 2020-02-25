@@ -48,6 +48,15 @@ class App extends Component {
   }
 
   render() {
+    const emojis = {
+      happy: 'grinning-face-with-big-eyes',
+      sad: 'disappointed-face',
+      angry: 'angry-face',
+      fearful: 'face-screaming-in-fear',
+      neutral: 'neutral-face',
+      disgusted: 'confounded-face',
+      surprised: 'face-with-open-mouth'
+    }
     return (
       <div className='col-11 col-lg-6 col-md-8 container bg-light mt-5 mb-5 p-3 shadow'>
         <h1 className='h3 py-3 text-secondary text-center'>rhythmicFeel <Emoji emoji="musical-note"/>
@@ -58,6 +67,15 @@ class App extends Component {
         </div>
         <div className='py-3 text-center'>
           <p>Your mood is: {this.state.emotion}</p>
+          <div className='h2'>
+            {this.state.emotion === 'happy' && <Emoji emoji={emojis.happy}/>}
+            {this.state.emotion === 'sad' && <Emoji emoji={emojis.sad}/>}
+            {this.state.emotion === 'neutral' && <Emoji emoji={emojis.neutral}/>}
+            {this.state.emotion === 'angry' && <Emoji emoji={emojis.angry}/>}
+            {this.state.emotion === 'surprised' && <Emoji emoji={emojis.surprised}/>}
+            {this.state.emotion === 'fearful' && <Emoji emoji={emojis.fearful}/>}
+            {this.state.emotion === 'disgusted' && <Emoji emoji={emojis.disgusted}/>}
+          </div>
         </div>
       </div>
     )
