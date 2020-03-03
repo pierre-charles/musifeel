@@ -1,5 +1,9 @@
 body {
-  background: linear-gradient(90deg, #d53369 0%, #daae51 100%) no-repeat center center fixed;
+  font-family: Poppins;
+  font-size: 18px;
+  background: #ee0979;
+  background: -webkit-linear-gradient(to right, #ff6a00, #ee0979);
+  background: linear-gradient(to right, #ff6a00, #ee0979);
 }
 
 .video-container{
