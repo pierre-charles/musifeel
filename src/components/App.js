@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-// import Home from './Home'
-import Login from './Login'
+import Home from './Home'
+// import Login from './Login'
 import '../stylesheets/App.scss'
 
 export default class App extends Component {
@@ -12,8 +12,8 @@ export default class App extends Component {
   render () {
     return (
       <div>
-        {/* <Home /> */}
-        <Login />
+        <Home />
+        {/* <Login /> */}
       </div>
     )
   }
