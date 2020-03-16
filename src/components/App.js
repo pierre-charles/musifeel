@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Home from './Home'
-// import Login from './Login'
+import Login from './Login'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import '../stylesheets/App.scss'
 
 export default class App extends Component {
@@ -9,12 +10,14 @@ export default class App extends Component {
     this.state = {}
   }
 
-  render () {
+  render() {
     return (
-      <div>
-        <Home />
-        {/* <Login /> */}
-      </div>
+      <Router>
+        <div>
+          <Route path='/' exact component={Login}/>
+          <Route path='/home' component={Home}/>
+        </div>
+      </Router>
     )
   }
 }
