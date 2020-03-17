@@ -8,7 +8,10 @@ export default class Home extends Component {
     super(props)
     this.video = React.createRef();
     this.canvas = React.createRef();
-    this.state = {}
+    const hash = window.location.hash.substr(1).split('&')
+    const hashDecompose = hash[0].split('=')
+    const access_token = hashDecompose[1]
+    this.state = { access_token: access_token }
   }
 
   componentDidMount() {
@@ -51,32 +54,24 @@ export default class Home extends Component {
   }
 
   getSpotifyTopArtists = async () => {
-    const hash = window.location.hash.substr(1).split('&')
-    const accessToken = hash[0].split('=')
-    const userAccessToken = accessToken[1]
-    localStorage.setItem('access_token', userAccessToken);
-
     const apiCall = await fetch(`https://api.spotify.com/v1/me/top/artists`, {
       headers: {
-        'Authorization': 'Bearer ' + userAccessToken
+        'Authorization': 'Bearer ' + this.state.access_token
       }
     })
+
     const response = await apiCall.json()
     console.log('response', response)
     response.items.map(results => { console.log(results.name) })
   }
 
   getSpotifyTracks = async () => {
-    const hash = window.location.hash.substr(1).split('&')
-    const accessToken = hash[0].split('=')
-    const userAccessToken = accessToken[1]
-    localStorage.setItem('access_token', userAccessToken);
-
     const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=100`, {
       headers: {
-        'Authorization': 'Bearer ' + userAccessToken
+        'Authorization': 'Bearer ' + this.state.access_token
       }
     })
+
     const response = await apiCall.json()
     console.log('response', response)
     response.items.map(results => { console.log(results.name) })
