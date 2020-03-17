@@ -8,10 +8,6 @@ export default class Home extends Component {
     super(props)
     this.video = React.createRef();
     this.canvas = React.createRef();
-    const hash = window.location.hash.substr(1).split('&')
-    const hashDecompose = hash[0].split('=')
-    const access_token = hashDecompose[1]
-    this.state = { access_token: access_token }
   }
 
   componentDidMount() {
@@ -21,9 +17,6 @@ export default class Home extends Component {
       faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
       faceapi.nets.faceExpressionNet.loadFromUri('/models')
     ]).then(this.startVideo)
-
-    this.getSpotifyTopArtists()
-    this.getSpotifyTracks()
   }
 
   startVideo = () => {
@@ -51,30 +44,6 @@ export default class Home extends Component {
         })
       }
     }, 100)
-  }
-
-  getSpotifyTopArtists = async () => {
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/artists`, {
-      headers: {
-        'Authorization': 'Bearer ' + this.state.access_token
-      }
-    })
-
-    const response = await apiCall.json()
-    console.log('response', response)
-    response.items.map(results => { console.log(results.name) })
-  }
-
-  getSpotifyTracks = async () => {
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=100`, {
-      headers: {
-        'Authorization': 'Bearer ' + this.state.access_token
-      }
-    })
-
-    const response = await apiCall.json()
-    console.log('response', response)
-    response.items.map(results => { console.log(results.name) })
   }
 
   render() {
