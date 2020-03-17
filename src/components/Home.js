@@ -65,10 +65,10 @@ export default class Home extends Component {
     return (
       <div className='col-11 col-lg-6 col-md-8 container bg-light mt-5 mb-5 p-3 shadow'>
         <div className='video-container'>
-          <video className='video-container col-12' onLoadedMetadata={ () => { this.simulate() }} width='700' height='500' autoPlay muted playsInline ref={this.video}></video>
-          <canvas className='overlay container-fluid' ref={this.canvas}/>
+          <video className='video-container container-fluid pt-3' onLoadedMetadata={ () => { this.simulate() }} width='600' height='400' autoPlay muted playsInline ref={this.video}></video>
+          <canvas className='overlay container-fluid pt-3' ref={this.canvas}/>
         </div>
-        <div className='py-3 text-center'>
+        <div className='text-center py-3'>
           <p>Your mood is: {this.state.emotion}</p>
           <div className='h2'>
             {this.state.emotion === 'happy' && <Emoji emoji={emojis.happy}/>}
