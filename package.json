@@ -6,6 +6,7 @@
     "@tensorflow/tfjs-node": "^1.5.2",
     "canvas": "^2.6.1",
     "face-api.js": "^0.22.1",
+    "query-string": "^6.11.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-emojis": "^1.0.6",

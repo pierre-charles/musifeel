@@ -9,14 +9,14 @@ export default class Home extends Component {
     this.video = React.createRef();
     this.canvas = React.createRef();
     this.state = {}
+  }
+
+  componentDidMount() {
     const hash = window.location.hash.substr(1).split('&')
     const accessToken = hash[0].split('=')
     const userAccessToken = accessToken[1]
     localStorage.setItem('access_token', userAccessToken);
-  }
-
-
-  componentDidMount() {
+    
     Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
       faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
@@ -38,7 +38,6 @@ export default class Home extends Component {
     const detections = await faceapi.detectAllFaces(this.video.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
     const resizedDetections = faceapi.resizeResults(detections, displaySize, true)
     this.canvas.current.getContext('2d').clearRect(0, 0, this.canvas.current.width, this.canvas.current.height)
-    // faceapi.draw.drawFaceLandmarks(this.canvas.current, resizedDetections)
     faceapi.draw.drawDetections(this.canvas.current, resizedDetections)
     if (resizedDetections && resizedDetections.length > 0) {
       const detection = resizedDetections[0].expressions
@@ -50,6 +49,12 @@ export default class Home extends Component {
         emotion: emotion.toString()
       })
     }}, 100)
+  }
+
+  getSpotifyData = async () => {
+    const apiCall = await fetch(``)
+    const response = await apiCall.json()
+    console.log('response', response)
   }
 
   render() {
