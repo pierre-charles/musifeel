@@ -9,7 +9,12 @@ export default class Home extends Component {
     this.video = React.createRef();
     this.canvas = React.createRef();
     this.state = {}
+    const hash = window.location.hash.substr(1).split('&')
+    const accessToken = hash[0].split('=')
+    const userAccessToken = accessToken[1]
+    localStorage.setItem('access_token', userAccessToken);
   }
+
 
   componentDidMount() {
     Promise.all([
@@ -61,7 +66,7 @@ export default class Home extends Component {
       <div className='col-11 col-lg-6 col-md-8 container bg-light mt-5 mb-5 p-3 shadow'>
         <div className='video-container'>
           <video className='video-container col-12' onLoadedMetadata={ () => { this.simulate() }} width='700' height='500' autoPlay muted playsInline ref={this.video}></video>
-          <canvas className='overlay col-12' ref={this.canvas}/>
+          <canvas className='overlay container-fluid' ref={this.canvas}/>
         </div>
         <div className='py-3 text-center'>
           <p>Your mood is: {this.state.emotion}</p>
