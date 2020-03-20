@@ -8,6 +8,7 @@ export default class Home extends Component {
     super(props)
     this.video = React.createRef();
     this.canvas = React.createRef();
+    this.state = { emotion: null }
   }
 
   componentDidMount() {
