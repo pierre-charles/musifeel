@@ -26,9 +26,11 @@ export default class Playlists extends Component {
     const results = this.state.results
     console.log('RESULTS', results)
     for(let i =0; i<Object.keys(results).length; i++) {
-      console.log(results[i].name)
-      console.log(results[i].external_urls.spotify)
-      console.log(results[i].id)
+      console.log('Track name: ',results[i].name)
+      console.log('640 image: ',results[i].album.images[0].url)
+      console.log('64 image: ',results[i].album.images[2].url)
+      console.log('Track ID: ',results[i].id)
+      console.log('External link: ',results[i].external_urls.spotify)
     }
   }
 
