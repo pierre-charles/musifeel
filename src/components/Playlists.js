@@ -11,11 +11,14 @@ export default class Playlists extends Component {
   }
 
   componentDidMount() {
-    this.getSpotifyTracks()
+    // const timeRange = 'long_term'
+    const timeRange = 'short_term'
+    // const timeRange = 'medium_term'
+    this.getSpotifyTracks(timeRange)
   }
 
-  getSpotifyTracks = async () => {
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=50`, {
+  getSpotifyTracks = async (timeRange) => {
+    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=50`, {
       headers: {
         'Authorization': 'Bearer ' + this.props.match.params.token
       }
@@ -26,11 +29,11 @@ export default class Playlists extends Component {
     const results = this.state.results
     console.log('RESULTS', results)
     for(let i =0; i<Object.keys(results).length; i++) {
-      console.log('Track name: ',results[i].name)
-      console.log('640 image: ',results[i].album.images[0].url)
-      console.log('64 image: ',results[i].album.images[2].url)
-      console.log('Track ID: ',results[i].id)
-      console.log('External link: ',results[i].external_urls.spotify)
+      console.log('Track name: ', results[i].name)
+      console.log('640 image: ', results[i].album.images[0].url)
+      console.log('64 image: ', results[i].album.images[2].url)
+      console.log('Track ID: ', results[i].id)
+      console.log('External link: ', results[i].external_urls.spotify)
     }
   }
 
