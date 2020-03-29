@@ -1,25 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Home from './Home'
 import Login from './Login'
-import Suggestion from './Suggestion'
+import Playlists from './Playlists'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import '../stylesheets/App.scss'
 
-export default class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-
-  render() {
-    return (
-      <Router>
-        <div>
-          <Route path='/' exact component={Login}/>
-          <Route path='/home' component={Home}/>
-          <Route path='/suggest' component={Suggestion}/>
-        </div>
-      </Router>
-    )
-  }
+const App = () => {
+  return (
+    <Router forceRefresh={true}>
+      <div>
+        <Route path='/' exact component={Login} />
+        <Route path='/home/' exact component={Home} />
+        <Route path='/playlists/:token' exact component={Playlists} />
+      </div>
+    </Router>
+  )
 }
+
+export default App

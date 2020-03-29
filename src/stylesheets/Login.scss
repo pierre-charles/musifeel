@@ -1,4 +1,4 @@
-body {
+.bd-container {
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -11,16 +11,6 @@ body {
 .header {
 	font-family: Heebo;
 	font-size: 3.5rem;
-}
-
-.container {
-	position: absolute;
-	height: 50%;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	margin: auto;
 }
 
 .spotify-login {
