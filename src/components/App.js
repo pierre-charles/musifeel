@@ -11,7 +11,7 @@ const App = () => {
       <div>
         <Route path='/' exact component={Login} />
         <Route path='/home/' exact component={Home} />
-        <Route path='/playlists/:token' exact component={Playlists} />
+        <Route path='/playlists/:token/:mood' exact component={Playlists} />
       </div>
     </Router>
   )

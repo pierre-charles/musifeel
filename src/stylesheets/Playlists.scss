@@ -1,0 +1,35 @@
+$color-primary: #ff6a00;
+$color-secondary: #ee0979;
+
+.color-secondary {
+  color: $color-secondary;
+}
+
+a {
+  color: #53575b;
+}
+
+a:hover {
+  text-decoration: none;
+  color: $color-secondary;
+}
+
+.button-back {
+  border-radius: 50rem;
+  background-color: transparent;
+  background-image: none;
+  font-size: 1rem;
+  padding: .6rem 3rem;
+  color: white;
+  border: solid 2px #FFFFFF;
+  transition: 0.5s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  cursor: pointer;
+  display: inline-block;
+  outline: none;
+}
+
+.button-back:focus {
+	outline: none;
+}
