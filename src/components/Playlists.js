@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Emoji from 'react-emojis'
 import '../stylesheets/Playlists.scss'
-import { Link } from 'react-router-dom'
 
 export default class Playlists extends Component {
   constructor(props) {
@@ -11,15 +10,8 @@ export default class Playlists extends Component {
     }
   }
 
-  componentDidMount() {
-    // const timeRange = 'long_term'
-    const timeRange = 'short_term'
-    // const timeRange = 'medium_term'
-    this.getSpotifyTracks(timeRange)
-  }
-
-  getSpotifyTracks = async (timeRange) => {
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=50`, {
+  getShortTermSpotifyTracks = async (timerange) => {
+    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=50`, {
       headers: {
         'Authorization': 'Bearer ' + this.props.match.params.token
       }
@@ -28,7 +20,6 @@ export default class Playlists extends Component {
     const response = await apiCall.json()
     this.setState({ results: response.items })
     const results = this.state.results
-    console.log('RESULTS', results)
     for (let i = 0; i < Object.keys(results).length; i++) {
       console.log('Track name: ', results[i].name)
       console.log('640 image: ', results[i].album.images[0].url)
@@ -38,11 +29,12 @@ export default class Playlists extends Component {
     }
   }
 
-  trigger = () => {
-    console.log('TRIGGER')
-  }
-
   render() {
+    const range = {
+      longTerm: 'long_term',
+      mediumTerm: 'medium_term',
+      shortTerm: 'short_term'
+    }
     const mood = this.props.match.params.mood
     const emojis = {
       happy: 'grinning-face-with-big-eyes',
@@ -53,8 +45,9 @@ export default class Playlists extends Component {
       disgusted: 'confounded-face',
       surprised: 'face-with-open-mouth'
     }
+
     return (
-      <div className='container text-white'>
+      <div className='container text-white' >
         <div className='my-5'>
           <h1>Music based on your mood <Emoji emoji='musical-note' /></h1>
           <h2 className='h4'><span className='mr-2'>Mood: {mood}</span>
@@ -70,27 +63,27 @@ export default class Playlists extends Component {
         <div className='p-1 fluid-container bg-white py-5 px-5 color-secondary shadow'>
           <h1 className='h3'>Your top tracks</h1>
           <div className='col-md-12 col-sm-12 p-0 text-secondary'>
-            <span><a href={this.trigger} onClick={this.trigger}>Last Month</a></span>
-            <span className='pl-4'><a href={this.trigger} onClick={this.trigger}>Last 6 Months</a></span>
-            <span className='pl-4'><a href={this.trigger} onClick={this.trigger}>All Time</a></span>
+            <span><button className='button-range' onClick={() => { this.getShortTermSpotifyTracks(range.shortTerm) }}>Last Month</button></span>
+            <span className='pl-4'><button className='button-range' onClick={() => { this.getShortTermSpotifyTracks(range.mediumTerm) }}>Last 6 Months</button></span>
+            <span className='pl-4'><button className='button-range' onClick={() => { this.getShortTermSpotifyTracks(range.longTerm) }}>All Time</button></span>
           </div>
           <hr />
           <div className='mt-4 p-1 row container'>
             <div className='col-md-4 col-sm-12'>
-              <h1 className='h4'>Upbeat <Emoji emoji='beaming-face-with-smiling-eyes' /></h1>
+              <h1 className='h4'>Playlist 1 <Emoji emoji='musical-note' /></h1>
             </div>
             <div className='col-md-4 col-sm-12'>
-              <h1 className='h4'>Energetic <Emoji emoji='exploding-head' /></h1>
+              <h1 className='h4'>Playlist 2 <Emoji emoji='musical-notes' /></h1>
             </div>
             <div className='col-md-4 col-sm-12'>
-              <h1 className='h4'>Party <Emoji emoji='woman-dancing' /></h1>
+              <h1 className='h4'>Playlist 3 <Emoji emoji='musical-score' /></h1>
             </div>
           </div>
         </div>
         <div className='text-right'>
           <button className='mt-5 mb-3 button-back'><i className='pr-2 fas fa-chevron-left'></i>Go Back</button>
         </div>
-      </div>
+      </div >
     )
   }
 }
