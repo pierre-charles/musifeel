@@ -12,9 +12,9 @@ export default class Home extends Component {
     const hash = window.location.hash.substr(1).split('&')
     const hashDecompose = hash[0].split('=')
     const access_token = hashDecompose[1]
+    localStorage.setItem('accessToken', access_token)
     this.state = { 
       emotion: null, 
-      access_token: access_token
     }
   }
 
@@ -47,9 +47,8 @@ export default class Home extends Component {
         const emotion = Object.keys(detection).filter(
           item => detection[item] === maxValue
         )
-        this.setState({
-          emotion: emotion.toString()
-        })
+        localStorage.setItem('mood', emotion.toString())
+        this.setState({ emotion: emotion.toString()})
       }
     }, 100)
   }
@@ -82,7 +81,7 @@ export default class Home extends Component {
               {this.state.emotion === 'fearful' && <Emoji emoji={emojis.fearful} />}
               {this.state.emotion === 'disgusted' && <Emoji emoji={emojis.disgusted} />}
             </div>
-            <Link to={{ pathname: `/playlists/${this.state.access_token}/${this.state.emotion}`,  }}>
+            <Link to={{ pathname: `/playlists/`  }}>
               {this.state.emotion && <button type='button' className='button-next mt-5 mb-3'>Make my playlists!<i className='pl-2 fas fa-headphones'></i></button>}
             </Link>
           </div>

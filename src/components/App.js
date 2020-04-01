@@ -10,8 +10,8 @@ const App = () => {
     <Router forceRefresh={true}>
       <div>
         <Route path='/' exact component={Login} />
-        <Route path='/home/' exact component={Home} />
-        <Route path='/playlists/:token/:mood' exact component={Playlists} />
+        <Route path='/home' exact component={Home} />
+        <Route path='/playlists' exact component={Playlists} />
       </div>
     </Router>
   )
