@@ -4,6 +4,14 @@
   color: $color-primary;
 }
 
+.color-secondary {
+  color: $color-secondary;
+}
+
+.color-tertiary {
+  color: $color-tertiary;
+}
+
 .button-range{
   color: $color-tertiary;
   background: none;
@@ -17,6 +25,21 @@
 
 .button-range:focus {
 	outline: none;
+}
+
+.button-range-active {
+  background-image: linear-gradient(to right, #FF5858, #F09819);
+  color: #FFF;
+  border-radius: 100px;
+  border: none;
+  padding: 8px 12px;
+  box-shadow: 0px 4px 10px 0px rgba(14,0,21,0.15);
+  font-weight: 900;
+  width: 200px;
+}
+
+.button-range-active:focus {
+  outline: none;
 }
 
 .button-back {
