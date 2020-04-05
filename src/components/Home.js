@@ -81,7 +81,7 @@ export default class Home extends Component {
               {this.state.emotion === 'fearful' && <Emoji emoji={emojis.fearful} />}
               {this.state.emotion === 'disgusted' && <Emoji emoji={emojis.disgusted} />}
             </div>
-            <Link to={{ pathname: `/playlists/`  }}>
+            <Link to={{ pathname: `/playlists` }}>
               {this.state.emotion && <button type='button' className='button-next mt-5 mb-3'>Make my playlists!<i className='pl-2 fas fa-headphones'></i></button>}
             </Link>
           </div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Emoji from 'react-emojis'
+import Track from './Track'
 import '../stylesheets/Playlists.scss'
 
 export default class Playlists extends Component {
@@ -7,17 +8,22 @@ export default class Playlists extends Component {
     super(props)
     this.state = {
       results: [],
-      features: []
+      features: [],
+      range : {
+        longTerm: 'long_term',
+        mediumTerm: 'medium_term',
+        shortTerm: 'short_term'
+      }
     }
   }
 
   componentDidMount() {
-    const shortTerm = 'short_term'
-    this.getSpotifyTracks(shortTerm)
+    console.log(this.props)
+    this.getSpotifyTracks(this.state.range.shortTerm)
   }
 
   getSpotifyTracks = async (timerange) => {
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=50`, {
+    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=25`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
       }
@@ -27,17 +33,10 @@ export default class Playlists extends Component {
     this.setState({ results: response.items })
     const results = this.state.results
     for (let i = 0; i < Object.keys(results).length; i++) {
-      console.log('Track name: ', results[i].name)
-      console.log('Artist: ', results[i].album.artists[0].name)
-      console.log('640 image: ', results[i].album.images[0].url)
-      console.log('Track ID: ', results[i].id)
-      console.log('Preview', results[i].preview_url)
-      console.log('External link: ', results[i].external_urls.spotify)
       ids.push(results[i].id)
       if (ids.length === 50) {
         const collectedIds = ids.toString()
         this.getAudioFeature(collectedIds)
-        this.state.results.map(data => { console.log(data.name) })
       }
     }
   }
@@ -54,15 +53,6 @@ export default class Playlists extends Component {
   }
 
   render() {
-    const range = {
-      longTerm: 'long_term',
-      mediumTerm: 'medium_term',
-      shortTerm: 'short_term'
-    }
-    console.log('TRACKS', this.state.results)
-    const data = Object.keys(this.state.results).length === 50 ? this.state.results : null
-    console.log('DATA', data)
-
     const mood = localStorage.getItem('mood')
     const emojis = {
       happy: 'grinning-face-with-big-eyes',
@@ -73,7 +63,6 @@ export default class Playlists extends Component {
       disgusted: 'confounded-face',
       surprised: 'face-with-open-mouth'
     }
-
     return (
       <div className='container text-white' >
         <div className='my-5'>
@@ -88,28 +77,67 @@ export default class Playlists extends Component {
             {mood === 'disgusted' && <Emoji emoji={emojis.disgusted} />}
           </h2>
         </div>
-        <div className='p-1 fluid-container bg-white py-5 px-5 color-secondary shadow'>
+        <div className='p-1 fluid-container bg-white py-5 px-5 color-primary shadow'>
           <h1 className='h3'>Your top tracks</h1>
           <div className='col-md-12 col-sm-12 p-0 text-secondary'>
-            <span><button className='button-range' onClick={() => { this.getSpotifyTracks(range.shortTerm) }}>Last Month</button></span>
-            <span className='pl-4'><button className='button-range' onClick={() => { this.getSpotifyTracks(range.mediumTerm) }}>Last 6 Months</button></span>
-            <span className='pl-4'><button className='button-range' onClick={() => { this.getSpotifyTracks(range.longTerm) }}>All Time</button></span>
+            <span><button className='button-range' onClick={() => { this.getSpotifyTracks(this.state.range.shortTerm) }}>Last Month</button></span>
+            <span className='pl-4'><button className='button-range' onClick={() => { this.getSpotifyTracks(this.state.range.mediumTerm) }}>Last 6 Months</button></span>
+            <span className='pl-4'><button className='button-range' onClick={() => { this.getSpotifyTracks(this.state.range.longTerm) }}>All Time</button></span>
           </div>
           <hr />
           <div className='mt-4 p-1 row container'>
-            <div className='col-md-4 col-sm-12'>
+            <div className='col-md-4 col-sm-12 mb-5'>
               <h1 className='h4'>Playlist 1 <Emoji emoji='musical-note' /></h1>
+              <hr />
+              { this.state.results.map(
+                track => {
+                  return (
+                    <Track 
+                      name={track.name}
+                      artist={track.album.artists[0].name}
+                      albumArt={track.album.images[1].url}
+                      preview={track.preview_url} 
+                    />
+                  )
+                }
+              )}
             </div>
-            <div className='col-md-4 col-sm-12'>
+            {/* <div className='col-md-4 col-sm-12'>
               <h1 className='h4'>Playlist 2 <Emoji emoji='musical-notes' /></h1>
-            </div>
-            <div className='col-md-4 col-sm-12'>
+              <hr />
+              { this.state.results.map(
+                track => {
+                  return (
+                    <Track 
+                      name={track.name}
+                      artist={track.album.artists[0].name}
+                      albumArt={track.album.images[1].url}
+                      preview={track.preview_url} 
+                    />
+                  )
+                }
+              )}
+            </div> */}
+            {/* <div className='col-md-4 col-sm-12'>
               <h1 className='h4'>Playlist 3 <Emoji emoji='musical-score' /></h1>
-            </div>
+              <hr />
+              { this.state.results.map(
+                track => {
+                  return (
+                    <Track 
+                      name={track.name}
+                      artist={track.album.artists[0].name}
+                      albumArt={track.album.images[1].url}
+                      preview={track.preview_url} 
+                    />
+                  )
+                }
+              )}
+            </div> */}
           </div>
         </div>
-        <div className='text-right'>
-          <button className='mt-5 mb-3 button-back'><i className='pr-2 fas fa-chevron-left'></i>Go Back</button>
+        <div className='text-right mb-5'>
+          <button className='mt-5 mb-3 button-back' onClick={() => {this.props.history.goBack()}}><i className='pr-2 fas fa-chevron-left'></i>Go Back</button>
         </div>
       </div >
     )

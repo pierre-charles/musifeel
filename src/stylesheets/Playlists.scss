@@ -1,9 +1,7 @@
-$color-primary: #ff6a00;
-$color-secondary: #ee0979;
-$color-tertiary: #53575b;
+@import './App.scss';
 
-.color-secondary {
-  color: $color-secondary;
+.color-primary {
+  color: $color-primary;
 }
 
 .button-range{
