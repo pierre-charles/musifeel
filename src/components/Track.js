@@ -9,8 +9,9 @@ const Track = (props) => {
       </div>
       <div className='col-md-9 col-sm-12 m-0'>
         <p className='h5 m-0 font-weight-bold'>{props.name}</p>
-        <p className='h6 m-0 color-secondary'>{props.artist}</p>
-        {props.lastPlayed && <p className='color-tertiary'>Last played: {moment(props.lastPlayed).format("ddd, Do MMM YYYY, hh:mm a")}</p>}
+        {props.albumName && <p className='m-0 color-tertiary'>{props.albumName}</p>}
+        <p className={props.albumName ? 'h6 m-0 color-secondary' : 'h6 m-0 color-tertiary'}>{props.artist}</p>
+        {props.lastPlayed && <p className='color-secondary'>Last played: {moment(props.lastPlayed).format("ddd, Do MMM YYYY, hh:mm a")}</p>}
       </div>
     </div>
   )

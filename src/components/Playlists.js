@@ -17,7 +17,6 @@ export default class Playlists extends Component {
       },
       activeTab: null
     }
-    // this.renderRecentTracks = this.renderRecentTracks.bind(this)
   }
 
   componentDidMount() {
@@ -25,7 +24,7 @@ export default class Playlists extends Component {
   }
 
   getRecentTracks = async () => {
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=50`, {
+    const apiCall = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=25`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
       }
@@ -36,7 +35,7 @@ export default class Playlists extends Component {
 
   getSpotifyTracks = async (timerange) => {
     this.setState({ activeTab: timerange })
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=50`, {
+    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=25`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
       }
@@ -47,7 +46,7 @@ export default class Playlists extends Component {
     const results = this.state.results
     for (let i = 0; i < Object.keys(results).length; i++) {
       ids.push(results[i].id)
-      if (ids.length === 50) {
+      if (ids.length === 25) {
         const collectedIds = ids.toString()
         this.getAudioFeature(collectedIds)
       }
@@ -63,6 +62,7 @@ export default class Playlists extends Component {
     const response = await apiCall.json()
     this.setState({ features: response.audio_features })
     console.log('FEATURES', this.state.features)
+    { this.state.features.map(feature => { console.log('Danceability: ', feature.danceability, '\n', 'Energy: ', feature.energy, '\n', 'Valence: ', feature.valence, '\n') }) }
   }
 
   render() {
@@ -125,32 +125,7 @@ export default class Playlists extends Component {
                   return (
                     <Track
                       name={music.name}
-                      artist={music.artists[0].name}
-                      albumArt={music.album.images[1].url}
-                      preview={music.preview_url}
-                    />
-                  )
-                }
-                )
-              }
-              {
-                this.state.activeTab && this.state.results.map(music => {
-                  return (
-                    <Track
-                      name={music.name}
-                      artist={music.artists[0].name}
-                      albumArt={music.album.images[1].url}
-                      preview={music.preview_url}
-                    />
-                  )
-                }
-                )
-              }
-              {
-                this.state.activeTab && this.state.results.map(music => {
-                  return (
-                    <Track
-                      name={music.name}
+                      albumName={music.album.name}
                       artist={music.artists[0].name}
                       albumArt={music.album.images[1].url}
                       preview={music.preview_url}
