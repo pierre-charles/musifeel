@@ -111,7 +111,7 @@ export default class Playlists extends Component {
             {mood === 'fearful' && <Emoji emoji={emojis.fearful} />}
             {mood === 'disgusted' && <Emoji emoji={emojis.disgusted} />}
           </h2>
-          {this.state.currentlyPlaying && <h3 className='h6 current-playing'>Currently playing: <a href={this.state.currentlyPlaying.href} target='_blank' rel="noopener noreferrer">{this.state.currentlyPlaying.name} - {this.state.currentlyPlaying.album}</a></h3>}
+          {this.state.currentlyPlaying && <h3 className='h6 pt-2 current-playing'>Currently playing: <a href={this.state.currentlyPlaying.href} target='_blank' rel="noopener noreferrer">{this.state.currentlyPlaying.name} - {this.state.currentlyPlaying.album}</a></h3>}
         </div>
         <div className='p-1 fluid-container bg-white py-5 px-5 color-primary shadow'>
           <div className='text-center'>
@@ -124,16 +124,15 @@ export default class Playlists extends Component {
               </div>
             </div>
           </div>
-          <hr />
           <div className='mt-4 p-1 row container'>
-            <div className='col-lg-8 col-md-8 col-sm-12 mb-5'>
+            <div className={!this.state.activeTab ? 'col-12 mb-5' : 'col-lg-6 col-md-6 col-sm-12 mb-5'}>
               <h1 className={this.state.activeTab ? 'playlist h3' : 'recently-played h3'}>{this.state.activeTab ? 'Playlist 1' : 'Recently played'} <Emoji emoji='musical-note' /></h1>
-              <hr />
               {
                 !this.state.activeTab && this.state.recent.map(music => {
                   return (
                     <Track
                       name={music.track.name}
+                      albumName={music.track.album.name}
                       artist={music.track.album.artists[0].name}
                       albumArt={music.track.album.images[1].url}
                       preview={music.track.preview_url}
@@ -156,6 +155,22 @@ export default class Playlists extends Component {
                   )
                 }
                 )
+              }
+            </div>
+            <div className='col-lg-6 col-md-6 col-sm-12 mb-5'>
+              {this.state.activeTab && <h1 className={this.state.activeTab ? 'playlist h3' : 'recently-played h3'}>{this.state.activeTab ? 'Playlist 1' : 'Recently played'} <Emoji emoji='musical-note' /></h1>}
+              {this.state.activeTab && this.state.results.map(music => {
+                return (
+                  <Track
+                    name={music.name}
+                    albumName={music.album.name}
+                    artist={music.artists[0].name}
+                    albumArt={music.album.images[1].url}
+                    preview={music.preview_url}
+                  />
+                )
+              }
+              )
               }
             </div>
           </div>

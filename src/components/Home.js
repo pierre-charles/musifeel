@@ -13,8 +13,8 @@ export default class Home extends Component {
     const hashDecompose = hash[0].split('=')
     const access_token = hashDecompose[1]
     localStorage.setItem('accessToken', access_token)
-    this.state = { 
-      emotion: null, 
+    this.state = {
+      emotion: null,
     }
   }
 
@@ -48,7 +48,7 @@ export default class Home extends Component {
           item => detection[item] === maxValue
         )
         localStorage.setItem('mood', emotion.toString())
-        this.setState({ emotion: emotion.toString()})
+        this.setState({ emotion: emotion.toString() })
       }
     }, 100)
   }
@@ -64,10 +64,10 @@ export default class Home extends Component {
       surprised: 'face-with-open-mouth'
     }
     return (
-      <div>
-        <div className='col-12 col-lg-6 col-md-8 container bg-light mt-5 mb-5 p-3 shadow'>
+      <div className='row'>
+        <div className='container col-lg-7 col-md-7 col-10 bg-light mt-5 mb-5 p-3 shadow'>
           <div className='pt-3 video-container'>
-            <video className='video-container container-fluid pt-3' onLoadedMetadata={() => { this.simulate() }} width='700' height='500' autoPlay muted playsInline ref={this.video}></video>
+            <video className='video-container container-fluid pt-3' onLoadedMetadata={() => { this.simulate() }} width='600' height='400' autoPlay muted playsInline ref={this.video}></video>
             <canvas className='overlay container-fluid pt-3' ref={this.canvas} />
           </div>
           <div className='text-center my-3'>

@@ -28,7 +28,7 @@
 }
 
 .button-range-active {
-  background-image: linear-gradient(to right, #FF5858, #F09819);
+  background-image: linear-gradient(to right, $color-primary, $color-secondary);
   color: #FFF;
   border-radius: 100px;
   border: none;
@@ -93,12 +93,14 @@ h1.title {
 .recently-played {
   @media (max-width: 725px) {
     font-size: 22px;
+    text-align: center !important;
   }
 }
 
 .playlist {
   @media (max-width: 725px) {
     font-size: 22px;
+    text-align: center !important;
   }
 }
 

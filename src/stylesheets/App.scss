@@ -1,18 +1,23 @@
-$color-primary: #ff5858;
-$color-secondary: #f09819;
+// $color-primary: #ff5858;
+// $color-secondary: #f09819;
+
+// $color-primary: #16a085;
+// $color-secondary: #d1ad1c;
+
+$color-primary: #13547a;
+$color-secondary: #3ea094;
+
 $color-tertiary: #434547;
 $color-quaternary: #6e7072;
 
 body {
-  font-family: Poppins;
+font-family: 'Muli', sans-serif;
+// font-family: 'Oxygen', sans-serif;
+// font-family: 'DM Sans', sans-serif;
 
   background: $color-primary;
   background: -webkit-linear-gradient(to right, $color-primary, $color-secondary);
   background: linear-gradient(to right, $color-primary, $color-secondary);
-  // background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%);
-  // background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);
-  // background-image: linear-gradient(to right, #16a085 0%, #f4d03f 100%);
-  // background-image: linear-gradient(to right, #ff5858 0%, #f09819 100%);
 
   ::selection {
     background-color: $color-secondary;
