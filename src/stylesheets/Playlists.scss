@@ -77,3 +77,37 @@
 .button-back:focus {
 	outline: none;
 }
+
+h1.title {
+  @media (max-width: 725px) {
+    font-size: 30px;
+  }
+}
+
+.favourite-track {
+  @media (max-width: 725px) {
+    font-size: 24px;
+  }
+}
+
+.recently-played {
+  @media (max-width: 725px) {
+    font-size: 22px;
+  }
+}
+
+.playlist {
+  @media (max-width: 725px) {
+    font-size: 22px;
+  }
+}
+
+.current-playing {
+  a {
+    color: #FFFFFF!important;
+  }
+  @media (max-width: 725px) {
+    font-size: 14px;
+    margin-right: 80px
+  }
+}
