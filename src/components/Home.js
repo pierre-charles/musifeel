@@ -67,7 +67,7 @@ export default class Home extends Component {
       <div className='row'>
         <div className='container col-lg-7 col-md-7 col-10 bg-light mt-5 mb-5 p-3 shadow'>
           <div className='pt-3 video-container'>
-            <video className='video-container container-fluid pt-3' onLoadedMetadata={() => { this.simulate() }} width='600' height='400' autoPlay muted playsInline ref={this.video}></video>
+            <video className='video-container container-fluid pt-3' onLoadedMetadata={() => { this.simulate() }} width='700' height='500' autoPlay muted playsInline ref={this.video}></video>
             <canvas className='overlay container-fluid pt-3' ref={this.canvas} />
           </div>
           <div className='text-center my-3'>

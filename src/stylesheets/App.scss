@@ -23,6 +23,8 @@ font-family: 'Muli', sans-serif;
     background-color: $color-secondary;
     color: #FFFFFF;
   }
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
 }
 
 .video-container {
@@ -44,4 +46,21 @@ hr {
   margin-bottom: 1rem;
   border: 0;
   border-top: 1px solid rgba(215, 215, 215, .4);
+}
+
+.album-art {
+  background-color: black;
+  background: black;
+  background-image: black;
+  width: 120px;
+  height: 120px;
+}
+
+.album-art:hover {
+  opacity: 60%;
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  background-color: $color-primary;
+  background-image: linear-gradient(to left, $color-primary, $color-secondary);
+  background: -webkit-linear-gradient(to right, $color-primary, $color-secondary);
+  background: linear-gradient(to right, $color-primary, $color-secondary);
 }
