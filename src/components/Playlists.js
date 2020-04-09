@@ -9,12 +9,11 @@ export default class Playlists extends Component {
     this.state = {
       results: [],
       features: [],
-      recent: [],
-      happyPlaylist: [],
-      sadPlaylist: [],
-      partyPlaylist: [],
-      chillPlaylist: [],
-      energeticPlaylist: [],
+      happy: [],
+      sad: [],
+      party: [],
+      chill: [],
+      energetic: [],
       range: {
         longTerm: 'long_term',
         mediumTerm: 'medium_term',
@@ -25,7 +24,7 @@ export default class Playlists extends Component {
   }
 
   componentDidMount() {
-    this.getRecentTracks()
+    this.getSpotifyTracks(this.state.range.shortTerm)
   }
 
   getRecentTracks = async () => {
@@ -66,7 +65,6 @@ export default class Playlists extends Component {
     })
     const response = await apiCall.json()
     this.setState({ features: response.audio_features })
-    console.log('FEATURES', this.state.features)
     const happy = []
     const sad = []
     const party = []
@@ -74,11 +72,11 @@ export default class Playlists extends Component {
     const energetic = []
     this.state.features.map(
       feature => {
-        if (feature.valence > 0.6 && feature.energy > 0.3) happy.push(feature.id)
+        if (feature.valence > 0.6 && feature.energy > 0.4 && feature.danceability > 0.5) happy.push(feature.id)
         if (feature.valence < 0.3 && feature.energy < 0.6) sad.push(feature.id)
-        if (feature.valence > 0.5 && feature.danceability >= 0.5 && feature.energy > 0.5) party.push(feature.id)
-        if (feature.valence > 0.3 && feature.energy < 0.4) chill.push(feature.id)
-        if (feature.energy > 0.8) energetic.push(feature.id)
+        if (feature.valence > 0.7 && feature.danceability >= 0.7 && feature.energy > 0.6) party.push(feature.id)
+        if (feature.valence > 0.2 && feature.energy <= 0.5) chill.push(feature.id)
+        if (feature.energy >= 0.7) energetic.push(feature.id)
       }
     )
     const happySongs = happy.toString()
@@ -92,22 +90,20 @@ export default class Playlists extends Component {
     const energeticSongs = energetic.toString()
     console.log('Energetic\n', energeticSongs)
 
-    this.sortSongsIntoPlaylists(happySongs, 'happyPlaylist')
-    this.sortSongsIntoPlaylists(sadSongs, 'sadPlaylist')
-    this.sortSongsIntoPlaylists(partySongs, 'partyPlaylist')
-    this.sortSongsIntoPlaylists(chillSongs, 'chillPlaylist')
-    this.sortSongsIntoPlaylists(energeticSongs, 'energeticPlaylist')
+    this.sortSongsIntoPlaylists(happy.toString(), 'happy')
+    this.sortSongsIntoPlaylists(sad.toString(), 'sad')
+    this.sortSongsIntoPlaylists(party.toString(), 'party')
+    this.sortSongsIntoPlaylists(chill.toString(), 'chill')
+    this.sortSongsIntoPlaylists(energetic.toString(), 'energetic')
   }
 
   sortSongsIntoPlaylists = async (ids, mood) => {
-    console.log(ids, mood)
     const apiCall = await fetch(`https://api.spotify.com/v1/tracks?ids=${ids}`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
       }
     })
     const response = await apiCall.json()
-    console.log('RESPONSE', response)
     this.setState({ [mood]: response.tracks })
   }
 
@@ -123,9 +119,9 @@ export default class Playlists extends Component {
       surprised: 'face-with-open-mouth'
     }
     return (
-      <div className='container text-white text-center' >
+      <div className='container text-white text-center mb-5' >
         <div className='my-5'>
-          <h1 className='title'>Music for your mood</h1>
+          <h1 className='title'>Music for your mood <Emoji emoji='musical-notes' /></h1>
           <h2 className='mood h4 '><span className='mr-2'>Mood: {mood}</span>
             {mood === 'happy' && <Emoji emoji={emojis.happy} />}
             {mood === 'sad' && <Emoji emoji={emojis.sad} />}
@@ -135,11 +131,13 @@ export default class Playlists extends Component {
             {mood === 'fearful' && <Emoji emoji={emojis.fearful} />}
             {mood === 'disgusted' && <Emoji emoji={emojis.disgusted} />}
           </h2>
-          {this.state.currentlyPlaying && <h3 className='h6 pt-2 current-playing'>Currently playing: <a href={this.state.currentlyPlaying.href} target='_blank' rel="noopener noreferrer">{this.state.currentlyPlaying.name} - {this.state.currentlyPlaying.album}</a></h3>}
+        </div>
+        <div className='text-left text-white'>
+          <p><button className='button-back' onClick={() => { this.props.history.goBack() }}><i className='pr-2 fas fa-chevron-left'></i>Re-scan my mood</button></p>
         </div>
         <div className='fluid-container bg-white py-5 px-5 color-primary shadow'>
           <div className='text-center'>
-            <h1 className='favourite-track h2 pb-3'>Your favourite tracks</h1>
+            <h1 className='favourite-track h2 pb-3'>Playlists for your mood</h1>
             <div className='row p-0 color-tertiary'>
               <div className='col-12'>
                 <p><button className={this.state.activeTab === 'short_term' ? 'button-range-active' : 'button-range'} onClick={() => { this.getSpotifyTracks(this.state.range.shortTerm) }}>Last Month</button></p>
@@ -149,85 +147,241 @@ export default class Playlists extends Component {
             </div>
           </div>
           <div className='mt-4 p-1 row text-center'>
-            <div className={!this.state.activeTab ? 'col-12 mb-5' : 'col-lg-6 col-md-6 col-sm-12 mb-5'}>
-              <h1 className={this.state.activeTab ? 'playlist h3' : 'recently-played h3'}>{this.state.activeTab ? 'Melancholic' : 'Recently played'} <Emoji emoji='musical-note' /></h1>
+            <div className='col-lg-4 col-md-4 col-sm-12 mb-5'>
               {
-                !this.state.activeTab && this.state.recent.map(music => {
-                  return (
-                    <Track
-                      name={music.track.name}
-                      albumName={music.track.album.name}
-                      artist={music.track.album.artists[0].name}
-                      albumArt={music.track.album.images[1].url}
-                      preview={music.track.preview_url}
-                      lastPlayed={music.played_at}
-                    />
-                  )
-                }
-                )
+                this.state.activeTab && mood === 'sad' &&
+                <div>
+                  <h1 className='playlist h3'>Melancholic <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.sad.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
               }
               {
-                this.state.activeTab && mood === 'sad' && this.state.sadPlaylist.map(music => {
-                  return (
-                    <Track
-                      name={music.name}
-                      albumName={music.album.name}
-                      artist={music.artists[0].name}
-                      albumArt={music.album.images[1].url}
-                      preview={music.preview_url}
-                    />
-                  )
-                }
-                )
+                this.state.activeTab && mood === 'angry' &&
+                <div>
+                  <h1 className='playlist h3'>Chill <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.chill.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
               }
               {
-                this.state.activeTab && mood === 'happy' && this.state.happyPlaylist.map(music => {
-                  return (
-                    <Track
-                      name={music.name}
-                      albumName={music.album.name}
-                      artist={music.artists[0].name}
-                      albumArt={music.album.images[1].url}
-                      preview={music.preview_url}
-                    />
-                  )
-                }
-                )
+                this.state.activeTab && mood === 'happy' &&
+                <div>
+                  <h1 className='playlist h3'>Peaceful <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.chill.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
+              }
+              {
+                (mood === 'neutral' || mood === 'disgusted' || mood === 'fearful' || mood === 'surprised') && this.state.activeTab &&
+                <div>
+                  <h1 className='playlist h3'>Relaxing <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.chill.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
               }
             </div>
-            <div className='col-lg-6 col-md-6 col-sm-12 mb-5'>
-              {this.state.activeTab && <h1 className={this.state.activeTab ? 'playlist h3' : 'recently-played h3'}>{this.state.activeTab ? 'Cheerful' : 'Recently played'} <Emoji emoji='musical-note' /></h1>}
-              {this.state.activeTab && mood === 'sad' && this.state.energeticPlaylist.map(music => {
-                return (
-                  <Track
-                    name={music.name}
-                    albumName={music.album.name}
-                    artist={music.artists[0].name}
-                    albumArt={music.album.images[1].url}
-                    preview={music.preview_url}
-                  />
-                )
+            <div className='col-lg-4 col-md-4 col-sm-12 mb-5'>
+              {
+                this.state.activeTab && mood === 'sad' &&
+                <div>
+                  <h1 className='playlist h3'>Happy <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.happy.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
               }
-              )
+              {
+                this.state.activeTab && mood === 'angry' &&
+                <div>
+                  <h1 className='playlist h3'>Energetic <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.energetic.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
               }
-              {this.state.activeTab && mood === 'happy' && this.state.energeticPlaylist.map(music => {
-                return (
-                  <Track
-                    name={music.name}
-                    albumName={music.album.name}
-                    artist={music.artists[0].name}
-                    albumArt={music.album.images[1].url}
-                    preview={music.preview_url}
-                  />
-                )
+              {
+                this.state.activeTab && mood === 'happy' &&
+                <div>
+                  <h1 className='playlist h3'>Joyful <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.happy.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
               }
-              )
+              {
+                (mood === 'neutral' || mood === 'disgusted' || mood === 'fearful' || mood === 'surprised') && this.state.activeTab &&
+                <div>
+                  <h1 className='playlist h3'>Upbeat <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.happy.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
+              }
+            </div>
+            <div className='col-lg-4 col-md-4 col-sm-12 mb-5'>
+              {
+                this.state.activeTab && mood === 'sad' &&
+                <div>
+                  <h1 className='playlist h3'>Cheerful <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.party.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
+              }
+              {
+                this.state.activeTab && mood === 'angry' &&
+                <div>
+                  <h1 className='playlist h3'>Upbeat <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.happy.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
+              }
+              {
+                this.state.activeTab && mood === 'happy' &&
+                <div>
+                  <h1 className='playlist h3'>Ecstatic <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.energetic.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
+              }
+              {
+                (mood === 'neutral' || mood === 'disgusted' || mood === 'fearful' || mood === 'surprised') && this.state.activeTab &&
+                <div>
+                  <h1 className='playlist h3'>Energetic <Emoji emoji='musical-note' /></h1>
+                  {
+                    this.state.energetic.map(music => {
+                      return (
+                        <Track
+                          name={music.name}
+                          albumName={music.album.name}
+                          artist={music.artists[0].name}
+                          albumArt={music.album.images[1].url}
+                          preview={music.preview_url}
+                        />
+                      )
+                    })
+                  }
+                </div>
               }
             </div>
           </div>
-        </div>
-        <div className='text-right mb-5'>
-          <button className='mt-5 mb-3 button-back' onClick={() => { this.props.history.goBack() }}><i className='pr-2 fas fa-chevron-left'></i>Go Back</button>
         </div>
       </div >
     )
