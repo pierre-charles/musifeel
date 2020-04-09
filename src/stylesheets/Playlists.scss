@@ -72,8 +72,17 @@ h1.title {
 }
 
 .favourite-track {
+  color: $color-primary;
   @media (max-width: 725px) {
-    font-size: 24px;
+    font-size: 23px;
+  }
+}
+
+.menu-title {
+  color: $color-primary;
+  @media (max-width: 725px) {
+    font-size: 14px;
+    font-weight: bolder;
   }
 }
 
@@ -84,8 +93,9 @@ h1.title {
 }
 
 .playlist {
+  color: $color-secondary;
   @media (max-width: 725px) {
-    font-size: 22px;
+    font-size: 25px;
   }
 }
 
@@ -97,4 +107,27 @@ h1.title {
     font-size: 14px;
     margin-right: 80px
   }
+}
+
+.menu-divider {
+  margin-left: 47%;
+  margin-right: 47%;
+}
+
+.title-holder {
+  @media (max-width: 725px) {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+}
+
+.heart {
+  color: #f36;
+  font-size: 20px;
+  font-weight: 100;
+  cursor: pointer;
+}
+
+.heart:hover{
+  font-weight: 900;
 }
