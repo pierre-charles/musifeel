@@ -19,6 +19,7 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
+    this.getSpotifyUserDetails()
     Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
       faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
@@ -51,6 +52,16 @@ export default class Home extends Component {
         this.setState({ emotion: emotion.toString() })
       }
     }, 100)
+  }
+
+  getSpotifyUserDetails = async () => {
+    const apiCall = await fetch(`https://api.spotify.com/v1/me/`, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+      }
+    })
+    const response = await apiCall.json()
+    localStorage.setItem('spotifyID', response.id)
   }
 
   render() {
