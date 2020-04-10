@@ -57,7 +57,7 @@ hr {
 }
 
 .album-art:hover {
-  opacity: 60%;
+  opacity: 80%;
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   background-color: $color-primary;
   background-image: linear-gradient(to left, $color-primary, $color-secondary);

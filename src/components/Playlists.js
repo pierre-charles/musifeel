@@ -3,6 +3,7 @@ import Emoji from 'react-emojis'
 import Track from './Track'
 import '../stylesheets/Playlists.scss'
 import moment from 'moment'
+import Popup from './Popup'
 
 export default class Playlists extends Component {
   constructor(props) {
@@ -20,12 +21,23 @@ export default class Playlists extends Component {
         mediumTerm: 'medium_term',
         shortTerm: 'short_term'
       },
-      activeTab: null
+      activeTab: null,
+      showPopup: false
     }
   }
 
   componentDidMount() {
     this.getSpotifyTracks(this.state.range.shortTerm)
+  }
+
+  togglePopup = () => {
+    this.setState({ showPopup: !this.state.showPopup })
+  }
+
+  showPopup = (name, href) => {
+    return (
+      <Popup name={name} href={href} closePopup={this.togglePopup} />
+    )
   }
 
   getRecentTracks = async () => {
@@ -71,7 +83,7 @@ export default class Playlists extends Component {
     const party = []
     const chill = []
     const energetic = []
-    this.state.features.map(
+    this.state.features.forEach(
       feature => {
         if (feature.valence > 0.6 && feature.energy > 0.4 && feature.danceability > 0.5) happy.push(feature.id)
         if (feature.valence < 0.3 && feature.energy < 0.6) sad.push(feature.id)
@@ -99,7 +111,7 @@ export default class Playlists extends Component {
 
   createMoodPlaylist = async (id, name, mood, period, date) => {
     const songs = []
-    this.state[mood].map(song => { songs.push(song.uri) })
+    this.state[mood].forEach(song => { songs.push(song.uri) })
     const apiCall = await fetch(`https://api.spotify.com/v1/users/${id}/playlists`, {
       method: 'POST',
       headers: {
@@ -114,6 +126,11 @@ export default class Playlists extends Component {
     })
     const response = await apiCall.json()
     this.addSongsToPlaylist(response.id, songs.toString())
+    this.setState({
+      playlistName: response.name,
+      playlistHref: response.external_urls.spotify,
+      showPopup: !this.state.showPopup
+    })
   }
 
   addSongsToPlaylist = async (id, tracks) => {
@@ -137,7 +154,7 @@ export default class Playlists extends Component {
       disgusted: 'confounded-face',
       surprised: 'face-with-open-mouth'
     }
-    const date = moment().format('do MMMM YYYY')
+    const date = moment().format('Do MMMM YYYY')
     const range = (this.state.activeTab === 'short_term') ? 'from last month' : (this.state.activeTab === 'medium_term') ? 'from last 6 months' : 'of all time'
     const spotifyID = localStorage.getItem('spotifyID')
     const playlistName = {
@@ -445,6 +462,7 @@ export default class Playlists extends Component {
             </div>
           </div>
         </div>
+        {this.state.showPopup ? this.showPopup(this.state.playlistName, this.state.playlistHref) : null}
       </div >
     )
   }

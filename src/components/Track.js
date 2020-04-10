@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import moment from 'moment'
-
 export default class Track extends Component {
   constructor(props) {
     super(props)
