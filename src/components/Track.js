@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import '../stylesheets/Tracks.scss'
 export default class Track extends Component {
   constructor(props) {
     super(props)
@@ -7,7 +8,7 @@ export default class Track extends Component {
 
   render() {
     return (
-      <div>
+      <div className='track'>
         <hr />
         <div className='row pt-2'>
           <div className='col-12 text-center'>
