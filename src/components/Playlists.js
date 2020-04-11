@@ -43,7 +43,7 @@ export default class Playlists extends Component {
   }
 
   getRecentTracks = async () => {
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=50`, {
+    const apiCall = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=25`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
       }
@@ -64,7 +64,6 @@ export default class Playlists extends Component {
     this.setState({ results: response.items })
     const topTracks = this.state.results
     const recentTracks = this.state.recent
-    console.log(recentTracks)
     for (let i = 0; i < Object.keys(topTracks).length; i++) {
       ids.add(topTracks[i].id)
     }
@@ -89,11 +88,11 @@ export default class Playlists extends Component {
     const energetic = []
     this.state.features.forEach(
       feature => {
-        if (feature.valence > 0.6 && feature.energy > 0.4 && feature.danceability > 0.5) happy.push(feature.id)
-        if (feature.valence <= 0.3 && feature.energy < 0.6) sad.push(feature.id)
-        if (feature.valence > 0.7 && feature.energy > 0.6) party.push(feature.id)
+        if (feature.valence > 0.3 && feature.energy > 0.4) happy.push(feature.id)
+        if (feature.valence < 0.3 && feature.energy < 0.4) sad.push(feature.id)
+        if (feature.valence > 0.5 && feature.danceability > 0.7) party.push(feature.id)
         if (feature.valence > 0.2 && feature.energy <= 0.5) chill.push(feature.id)
-        if (feature.energy >= 0.7) energetic.push(feature.id)
+        if (feature.energy >= 0.9) energetic.push(feature.id)
       }
     )
     this.sortSongsIntoPlaylists(happy.toString(), 'happy')
