@@ -10,6 +10,7 @@ export default class Playlists extends Component {
     super(props)
     this.state = {
       results: [],
+      recent: [],
       features: [],
       happy: [],
       sad: [],
@@ -27,6 +28,7 @@ export default class Playlists extends Component {
   }
 
   componentDidMount() {
+    this.getRecentTracks()
     this.getSpotifyTracks(this.state.range.shortTerm)
   }
 
@@ -58,16 +60,18 @@ export default class Playlists extends Component {
       }
     })
     const response = await apiCall.json()
-    const ids = []
+    let ids = new Set()
     this.setState({ results: response.items })
-    const results = this.state.results
-    for (let i = 0; i < Object.keys(results).length; i++) {
-      ids.push(results[i].id)
-      if (ids.length === 50) {
-        const collectedIds = ids.toString()
-        this.getAudioFeature(collectedIds)
-      }
+    const topTracks = this.state.results
+    const recentTracks = this.state.recent
+    console.log(recentTracks)
+    for (let i = 0; i < Object.keys(topTracks).length; i++) {
+      ids.add(topTracks[i].id)
     }
+    for (let j = 0; j < Object.keys(recentTracks).length; j++) {
+      ids.add(recentTracks[j].track.id)
+    }
+    this.getAudioFeature([...ids])
   }
 
   getAudioFeature = async (ids) => {
@@ -86,8 +90,8 @@ export default class Playlists extends Component {
     this.state.features.forEach(
       feature => {
         if (feature.valence > 0.6 && feature.energy > 0.4 && feature.danceability > 0.5) happy.push(feature.id)
-        if (feature.valence < 0.3 && feature.energy < 0.6) sad.push(feature.id)
-        if (feature.valence > 0.5 && feature.energy > 0.6) party.push(feature.id)
+        if (feature.valence <= 0.3 && feature.energy < 0.6) sad.push(feature.id)
+        if (feature.valence > 0.7 && feature.energy > 0.6) party.push(feature.id)
         if (feature.valence > 0.2 && feature.energy <= 0.5) chill.push(feature.id)
         if (feature.energy >= 0.7) energetic.push(feature.id)
       }
@@ -109,9 +113,9 @@ export default class Playlists extends Component {
     this.setState({ [mood]: response.tracks })
   }
 
-  createMoodPlaylist = async (id, name, mood, period, date) => {
+  createMoodPlaylist = async (id, name, mood, period, date, playlist) => {
     const songs = []
-    this.state[mood].forEach(song => { songs.push(song.uri) })
+    playlist.forEach(song => { songs.push(song.uri) })
     const apiCall = await fetch(`https://api.spotify.com/v1/users/${id}/playlists`, {
       method: 'POST',
       headers: {
@@ -179,6 +183,11 @@ export default class Playlists extends Component {
         playlist_3: 'Euphoric'
       }
     }
+    const happy = this.state.happy
+    const sad = this.state.sad
+    const chill = this.state.chill
+    const party = this.state.party
+    const energetic = this.state.energetic
 
     return (
       <div className='container text-white text-center mb-5' >
@@ -201,7 +210,7 @@ export default class Playlists extends Component {
           <div className='text-center'>
             <div className='row p-0 color-tertiary'>
               <div className='col-12'>
-                <h1 className='menu-title h6 pb-3'>Create playlists from your top tracks</h1>
+                <h1 className='menu-title h6 pb-3'>Create playlists from your top tracks and your most recent tracks</h1>
                 <p><button className={this.state.activeTab === 'short_term' ? 'button-range-active' : 'button-range'} onClick={() => { this.getSpotifyTracks(this.state.range.shortTerm) }}>Last Month</button></p>
                 <p><button className={this.state.activeTab === 'medium_term' ? 'button-range-active' : 'button-range'} onClick={() => { this.getSpotifyTracks(this.state.range.mediumTerm) }}>Last 6 Months</button></p>
                 <p className='mb-0'><button className={this.state.activeTab === 'long_term' ? 'button-range-active' : 'button-range'} onClick={() => { this.getSpotifyTracks(this.state.range.longTerm) }}>All Time</button></p>
@@ -219,9 +228,9 @@ export default class Playlists extends Component {
                 this.state.activeTab && mood === 'sad' &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.sad.playlist_1} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.sad.playlist_1, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.sad.playlist_1, mood, range, date, sad) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.sad.map(music => {
+                    sad.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -239,9 +248,9 @@ export default class Playlists extends Component {
                 this.state.activeTab && mood === 'angry' &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.angry.playlist_1} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.angry.playlist_1, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.angry.playlist_1, mood, range, date, chill) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.chill.map(music => {
+                    chill.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -259,9 +268,9 @@ export default class Playlists extends Component {
                 this.state.activeTab && mood === 'happy' &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.happy.playlist_1} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.happy.playlist_1, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.happy.playlist_1, mood, range, date, chill) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.chill.map(music => {
+                    chill.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -279,9 +288,9 @@ export default class Playlists extends Component {
                 (mood === 'neutral' || mood === 'disgusted' || mood === 'fearful' || mood === 'surprised') && this.state.activeTab &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.neutral.playlist_1} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.neutral.playlist_1, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.neutral.playlist_1, mood, range, date, sad) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.sad.map(music => {
+                    sad.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -301,9 +310,9 @@ export default class Playlists extends Component {
                 this.state.activeTab && mood === 'sad' &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.sad.playlist_2} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.sad.playlist_2, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.sad.playlist_2, mood, range, date, happy) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.happy.map(music => {
+                    happy.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -321,9 +330,9 @@ export default class Playlists extends Component {
                 this.state.activeTab && mood === 'angry' &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.angry.playlist_2} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.angry.playlist_2, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.angry.playlist_2, mood, range, date, energetic) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.energetic.map(music => {
+                    energetic.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -341,9 +350,9 @@ export default class Playlists extends Component {
                 this.state.activeTab && mood === 'happy' &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.happy.playlist_2} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.happy.playlist_2, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.happy.playlist_2, mood, range, date, happy) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.happy.map(music => {
+                    happy.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -361,9 +370,9 @@ export default class Playlists extends Component {
                 (mood === 'neutral' || mood === 'disgusted' || mood === 'fearful' || mood === 'surprised') && this.state.activeTab &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.neutral.playlist_2} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.neutral.playlist_2, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.neutral.playlist_2, mood, range, date, happy) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.happy.map(music => {
+                    happy.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -383,9 +392,9 @@ export default class Playlists extends Component {
                 this.state.activeTab && mood === 'sad' &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.sad.playlist_3} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.sad.playlist_3, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.sad.playlist_3, mood, range, date, party) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.party.map(music => {
+                    party.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -403,9 +412,9 @@ export default class Playlists extends Component {
                 this.state.activeTab && mood === 'angry' &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.angry.playlist_3} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.angry.playlist_3, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.angry.playlist_3, mood, range, date, happy) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.happy.map(music => {
+                    happy.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -423,9 +432,9 @@ export default class Playlists extends Component {
                 this.state.activeTab && mood === 'happy' &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.happy.playlist_3} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.happy.playlist_3, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.happy.playlist_3, mood, range, date, energetic) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.energetic.map(music => {
+                    energetic.map(music => {
                       return (
                         <Track
                           name={music.name}
@@ -443,9 +452,9 @@ export default class Playlists extends Component {
                 (mood === 'neutral' || mood === 'disgusted' || mood === 'fearful' || mood === 'surprised') && this.state.activeTab &&
                 <div>
                   <h1 className='playlist h3'>{playlistName.neutral.playlist_3} <Emoji emoji='musical-note' /></h1>
-                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.neutral.playlist_3, mood, range, date) }} className='heart pl-2 fas fa-heart'></i>
+                  <i onClick={() => { this.createMoodPlaylist(spotifyID, playlistName.neutral.playlist_3, mood, range, date, party) }} className='heart pl-2 fas fa-heart'></i>
                   {
-                    this.state.party.map(music => {
+                    party.map(music => {
                       return (
                         <Track
                           name={music.name}
