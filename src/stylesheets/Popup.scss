@@ -27,8 +27,9 @@ a:hover {
 
 .view-playlist {
   padding: 11px 32px 11px;
-  background-color: #1aa34a;
-  color: #fff !important;
+  margin-top: 30rem !important;
+  background-color: #1AA34A;
+  color: #FFFFFF !important;
   border-radius: 100px;
   width: 280px;
   text-align: center;
@@ -40,7 +41,7 @@ a:hover {
 }
 
 .view-playlist:hover {
-  background-color: #1db954;
+  background-color: #1DB954;
   box-shadow: 0px 4px 16px 0px rgba(14,0,21,0.1);
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   text-decoration: none;
