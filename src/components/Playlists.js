@@ -23,7 +23,7 @@ export default class Playlists extends Component {
         shortTerm: 'short_term'
       },
       activeTab: null,
-      showPopup: true
+      showPopup: false
     }
   }
 
