@@ -25,13 +25,9 @@ a:hover {
   color: $color-secondary;
 }
 
-.spotify-playlist {
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 13px;
-  padding-bottom: 13px;
-  height: 20px;
-  background-color: #1db954;
+.view-playlist {
+  padding: 11px 32px 11px;
+  background-color: #1aa34a;
   color: #fff !important;
   border-radius: 100px;
   width: 280px;
@@ -40,20 +36,12 @@ a:hover {
   cursor: pointer;
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin-top: 90px;
-  font-size: 16px;
-}
-.spotify-playlistfocus {
-	outline: none;
+  font-size: 12px;
 }
 
-.spotify-playlist:hover {
-	transform: translateY(-2px);
-	-webkit-transition: all 0.3s ease;
-	-moz-transition: all 0.3s ease;
-	-o-transition: all 0.3s ease;
-	transition: all 0.3s ease;
-	color: #fff;
+.view-playlist:hover {
+  background-color: #1db954;
   box-shadow: 0px 4px 16px 0px rgba(14,0,21,0.1);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   text-decoration: none;
 }
