@@ -92,7 +92,7 @@ export default class Playlists extends Component {
         if (feature.valence < 0.3 && feature.energy < 0.4) sad.push(feature.id)
         if (feature.valence > 0.5 && feature.danceability > 0.7) party.push(feature.id)
         if (feature.valence > 0.2 && feature.energy <= 0.5) chill.push(feature.id)
-        if (feature.energy >= 0.9) energetic.push(feature.id)
+        if (feature.energy >= 0.75) energetic.push(feature.id)
       }
     )
     this.sortSongsIntoPlaylists(happy.toString(), 'happy')
