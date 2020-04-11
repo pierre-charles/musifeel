@@ -124,7 +124,7 @@ export default class Playlists extends Component {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
       },
       body: JSON.stringify({
-        name: `Top ${name} tracks when ${mood} ${period} - ${date}`,
+        name: `Top ${name} tracks when feeling ${mood} ${period} - ${date}`,
         description: `Playlist to listen to when you are feeling ${mood} and fancy listening to ${name} songs! Created with love by musifeel!`
       })
     })
