@@ -54,7 +54,7 @@ export default class Playlists extends Component {
 
   getSpotifyTracks = async (timerange) => {
     this.setState({ activeTab: timerange })
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=50`, {
+    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=25`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
       }
@@ -89,7 +89,7 @@ export default class Playlists extends Component {
     this.state.features.forEach(
       feature => {
         if (feature.valence > 0.3 && feature.energy > 0.4) happy.push(feature.id)
-        if (feature.valence < 0.3 && feature.energy < 0.4) sad.push(feature.id)
+        if (feature.valence < 0.4 && feature.energy < 0.5) sad.push(feature.id)
         if (feature.valence > 0.5 && feature.danceability > 0.7) party.push(feature.id)
         if (feature.valence > 0.2 && feature.energy <= 0.5) chill.push(feature.id)
         if (feature.energy >= 0.75) energetic.push(feature.id)
