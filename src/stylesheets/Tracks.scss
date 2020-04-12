@@ -1,7 +1,6 @@
 @import './App.scss';
 
 .track {
-  // height: 17rem;
   vertical-align: middle;
 }
 
@@ -11,6 +10,10 @@
 }
 
 .album-art:hover {
-  opacity: 80%;
-  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+-webkit-filter: opacity(60%);
+filter: opacity(60%);
+-moz-transition: all 0.1s ease-in;
+-o-transition: all 0.1s ease-in;
+-webkit-transition: all 0.1s ease-in;
+transition: all 0.1s ease-in;
 }

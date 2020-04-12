@@ -18,6 +18,7 @@ export default class Playlists extends Component {
       chill: [],
       energetic: [],
       range: {
+        recent: 'recent',
         longTerm: 'long_term',
         mediumTerm: 'medium_term',
         shortTerm: 'short_term'
@@ -29,7 +30,6 @@ export default class Playlists extends Component {
 
   componentDidMount() {
     this.getRecentTracks()
-    this.getSpotifyTracks(this.state.range.shortTerm)
   }
 
   togglePopup = () => {
@@ -43,34 +43,37 @@ export default class Playlists extends Component {
   }
 
   getRecentTracks = async () => {
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=25`, {
+    this.setState({ activeTab: 'recent' })
+    const apiCall = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=50`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
       }
     })
     const response = await apiCall.json()
     this.setState({ recent: response.items })
+    const recentTracks = this.state.recent
+    const ids = new Set()
+    for (let j = 0; j < Object.keys(recentTracks).length; j++) {
+      ids.add(recentTracks[j].track.id)
+    }
+    this.getAudioFeature([...ids])
   }
 
   getSpotifyTracks = async (timerange) => {
     this.setState({ activeTab: timerange })
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=25`, {
+    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=50`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
       }
     })
     const response = await apiCall.json()
-    let ids = new Set()
+    let ids = []
     this.setState({ results: response.items })
     const topTracks = this.state.results
-    const recentTracks = this.state.recent
     for (let i = 0; i < Object.keys(topTracks).length; i++) {
-      ids.add(topTracks[i].id)
+      ids.push(topTracks[i].id)
     }
-    for (let j = 0; j < Object.keys(recentTracks).length; j++) {
-      ids.add(recentTracks[j].track.id)
-    }
-    this.getAudioFeature([...ids])
+    this.getAudioFeature(ids)
   }
 
   getAudioFeature = async (ids) => {
@@ -90,9 +93,9 @@ export default class Playlists extends Component {
       feature => {
         if (feature.valence > 0.3 && feature.energy > 0.4) happy.push(feature.id)
         if (feature.valence < 0.4 && feature.energy < 0.5) sad.push(feature.id)
-        if (feature.valence > 0.5 && feature.danceability > 0.7) party.push(feature.id)
+        if (feature.valence >= 0.4 && feature.danceability >= 0.6 && feature.energy >= 0.5) party.push(feature.id)
         if (feature.valence > 0.2 && feature.energy <= 0.5) chill.push(feature.id)
-        if (feature.energy >= 0.75) energetic.push(feature.id)
+        if (feature.energy >= 0.7) energetic.push(feature.id)
       }
     )
     this.sortSongsIntoPlaylists(happy.toString(), 'happy')
@@ -158,7 +161,7 @@ export default class Playlists extends Component {
       surprised: 'face-with-open-mouth'
     }
     const date = moment().format('Do MMMM YYYY')
-    const range = (this.state.activeTab === 'short_term') ? 'from last month' : (this.state.activeTab === 'medium_term') ? 'from last 6 months' : 'of all time'
+    const range = (this.state.activeTab === 'recent') ? 'from last week' : (this.state.activeTab === 'short_term') ? 'from last month' : (this.state.activeTab === 'medium_term') ? 'from last 6 months' : 'of all time'
     const spotifyID = localStorage.getItem('spotifyID')
     const playlistName = {
       happy: {
@@ -168,8 +171,8 @@ export default class Playlists extends Component {
       },
       sad: {
         playlist_1: 'Melancholic',
-        playlist_2: 'Happy',
-        playlist_3: 'Cheerful'
+        playlist_2: 'Cheerful',
+        playlist_3: 'Exciting'
       },
       angry: {
         playlist_1: 'Chill',
@@ -209,7 +212,8 @@ export default class Playlists extends Component {
           <div className='text-center'>
             <div className='row p-0 color-tertiary'>
               <div className='col-12'>
-                <h1 className='menu-title h6 pb-3'>Create playlists from your top tracks and your most recent tracks</h1>
+                <h1 className='menu-title h6 pb-3'>Create playlists from your top tracks</h1>
+                <p><button className={this.state.activeTab === 'recent' ? 'button-range-active' : 'button-range'} onClick={() => { this.getRecentTracks() }}>This Week</button></p>
                 <p><button className={this.state.activeTab === 'short_term' ? 'button-range-active' : 'button-range'} onClick={() => { this.getSpotifyTracks(this.state.range.shortTerm) }}>Last Month</button></p>
                 <p><button className={this.state.activeTab === 'medium_term' ? 'button-range-active' : 'button-range'} onClick={() => { this.getSpotifyTracks(this.state.range.mediumTerm) }}>Last 6 Months</button></p>
                 <p className='mb-0'><button className={this.state.activeTab === 'long_term' ? 'button-range-active' : 'button-range'} onClick={() => { this.getSpotifyTracks(this.state.range.longTerm) }}>All Time</button></p>
@@ -232,6 +236,7 @@ export default class Playlists extends Component {
                     sad.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -252,6 +257,7 @@ export default class Playlists extends Component {
                     chill.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -272,6 +278,7 @@ export default class Playlists extends Component {
                     chill.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -292,6 +299,7 @@ export default class Playlists extends Component {
                     sad.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -314,6 +322,7 @@ export default class Playlists extends Component {
                     happy.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -334,6 +343,7 @@ export default class Playlists extends Component {
                     energetic.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -354,6 +364,7 @@ export default class Playlists extends Component {
                     happy.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -374,6 +385,7 @@ export default class Playlists extends Component {
                     happy.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -396,6 +408,7 @@ export default class Playlists extends Component {
                     party.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -416,6 +429,7 @@ export default class Playlists extends Component {
                     happy.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -436,6 +450,7 @@ export default class Playlists extends Component {
                     energetic.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
@@ -456,6 +471,7 @@ export default class Playlists extends Component {
                     party.map(music => {
                       return (
                         <Track
+                          key={music.id}
                           name={music.name}
                           albumName={music.album.name}
                           artist={music.artists[0].name}
