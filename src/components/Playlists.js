@@ -239,6 +239,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -260,6 +261,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -281,6 +283,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -302,6 +305,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -325,6 +329,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -346,6 +351,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -367,6 +373,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -388,6 +395,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -411,6 +419,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -432,6 +441,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -453,6 +463,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
@@ -474,6 +485,7 @@ export default class Playlists extends Component {
                           key={music.id}
                           name={music.name}
                           albumName={music.album.name}
+                          href={music.external_urls.spotify}
                           artist={music.artists[0].name}
                           albumArt={music.album.images[1].url}
                           preview={music.preview_url}
