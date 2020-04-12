@@ -95,7 +95,7 @@ export default class Playlists extends Component {
         if (feature.valence < 0.4 && feature.energy < 0.5) sad.push(feature.id)
         if (feature.valence >= 0.4 && feature.danceability >= 0.6 && feature.energy >= 0.5) party.push(feature.id)
         if (feature.valence > 0.2 && feature.energy <= 0.5) chill.push(feature.id)
-        if (feature.energy >= 0.7) energetic.push(feature.id)
+        if (feature.energy > 0.75) energetic.push(feature.id)
       }
     )
     this.sortSongsIntoPlaylists(happy.toString(), 'happy')
@@ -151,6 +151,8 @@ export default class Playlists extends Component {
 
   render() {
     const mood = localStorage.getItem('mood')
+    const spotifyID = localStorage.getItem('spotifyID')
+    const date = moment().format('Do MMMM YYYY')
     const emojis = {
       happy: 'grinning-face-with-big-eyes',
       sad: 'disappointed-face',
@@ -160,14 +162,12 @@ export default class Playlists extends Component {
       disgusted: 'confounded-face',
       surprised: 'face-with-open-mouth'
     }
-    const date = moment().format('Do MMMM YYYY')
     const range = (this.state.activeTab === 'recent') ? 'from last week' : (this.state.activeTab === 'short_term') ? 'from last month' : (this.state.activeTab === 'medium_term') ? 'from last 6 months' : 'of all time'
-    const spotifyID = localStorage.getItem('spotifyID')
     const playlistName = {
       happy: {
-        playlist_1: 'Peaceful',
+        playlist_1: 'Chill',
         playlist_2: 'Joyful',
-        playlist_3: 'Ecstatic'
+        playlist_3: 'Energetic'
       },
       sad: {
         playlist_1: 'Melancholic',
