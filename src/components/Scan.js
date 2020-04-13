@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as faceapi from 'face-api.js';
-import '../stylesheets/Home.scss'
-import Popup from './Popup'
+import '../stylesheets/Scan.scss'
+import Popup from './ScanPopup'
 import MoodButton from './MoodButton'
 
 export default class Scan extends Component {
@@ -15,7 +15,8 @@ export default class Scan extends Component {
     localStorage.setItem('accessToken', access_token)
     this.state = {
       loaded: false,
-      emotion: 'unknown'
+      emotion: 'unknown',
+      showPopup: true
     }
   }
 
@@ -91,6 +92,7 @@ export default class Scan extends Component {
           </div>
           {this.state.loaded && <MoodButton emotion={this.state.emotion} />}
         </div>
+        {this.state.showPopup ? this.showPopup() : null}
       </div>
     )
   }
