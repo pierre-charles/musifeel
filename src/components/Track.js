@@ -13,7 +13,7 @@ export default class Track extends Component {
         <div className='row pt-2'>
           <div className='col-12 text-center'>
             <audio ref={this.audio} type="audio/mp3" src={this.props.preview}></audio>
-            <a href={this.props.href} target='_blank' rel="noopener noreferrer" onMouseEnter={() => { this.audio.current.volume = 0.25; this.audio.current.play() }} onMouseLeave={() => { this.audio.current.pause() }}><img className='album-art mb-2' src={this.props.albumArt} alt={this.props.name} /></a>
+            <img className='album-art mb-2' src={this.props.albumArt} alt={this.props.name} onMouseEnter={() => { this.audio.current.volume = 0.25; this.audio.current.play() }} onMouseLeave={() => { this.audio.current.pause() }} />
           </div>
           <div className='col-12 m-0 text-center column'>
             <p className='h5 m-0 font-weight-bold'>{this.props.name}</p>
