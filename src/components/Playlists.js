@@ -3,7 +3,7 @@ import Emoji from 'react-emojis'
 import Track from './Track'
 import '../stylesheets/Playlists.scss'
 import moment from 'moment'
-import Popup from './PlaylistPopup'
+import Popup from './Popup'
 
 export default class Playlists extends Component {
   constructor(props) {

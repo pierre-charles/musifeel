@@ -1,9 +1,9 @@
 import React from 'react'
-import '../stylesheets/PlaylistPopup.scss'
+import '../stylesheets/Popup.scss'
 import '../stylesheets/Login.scss'
 import Emoji from 'react-emojis'
 
-const PlaylistPopup = (props) => {
+const Popup = (props) => {
   return (
     <div className='popup'>
       <div className='bg-white rounded m-5'>
@@ -19,4 +19,4 @@ const PlaylistPopup = (props) => {
   )
 }
 
-export default PlaylistPopup
+export default Popup

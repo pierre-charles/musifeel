@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import * as faceapi from 'face-api.js';
 import '../stylesheets/Scan.scss'
-import Popup from './ScanPopup'
 import MoodButton from './MoodButton'
 
 export default class Scan extends Component {
@@ -16,7 +15,6 @@ export default class Scan extends Component {
     this.state = {
       loaded: false,
       emotion: 'unknown',
-      showPopup: true
     }
   }
 
@@ -28,16 +26,6 @@ export default class Scan extends Component {
       faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
       faceapi.nets.faceExpressionNet.loadFromUri('/models')
     ]).then(this.startVideo)
-  }
-
-  togglePopup = () => {
-    this.setState({ showPopup: !this.state.showPopup })
-  }
-
-  showPopup = (name, href) => {
-    return (
-      <Popup name={name} href={href} closePopup={this.togglePopup} />
-    )
   }
 
   startVideo = () => {
@@ -92,7 +80,6 @@ export default class Scan extends Component {
           </div>
           {this.state.loaded && <MoodButton emotion={this.state.emotion} />}
         </div>
-        {this.state.showPopup ? this.showPopup() : null}
       </div>
     )
   }
