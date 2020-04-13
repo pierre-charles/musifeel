@@ -4,6 +4,7 @@ import Track from './Track'
 import '../stylesheets/Playlists.scss'
 import moment from 'moment'
 import Popup from './Popup'
+import { Link } from 'react-router-dom'
 
 export default class Playlists extends Component {
   constructor(props) {
@@ -29,7 +30,8 @@ export default class Playlists extends Component {
   }
 
   componentDidMount() {
-    this.getRecentTracks()
+    // this.getRecentTracks()
+    this.getSpotifyTracks(this.state.range.shortTerm)
   }
 
   togglePopup = () => {
@@ -206,7 +208,9 @@ export default class Playlists extends Component {
           </h2>
         </div>
         <div className='text-left text-white'>
-          <p><button className='button-back' onClick={() => { this.props.history.goBack() }}><i className='pr-2 fas fa-chevron-left'></i>Re-scan my mood</button></p>
+          <Link to={{ pathname: `/scan` }}>
+            <p><button className='button-back' onClick={() => { this.props.history.goBack() }}><i className='pr-2 fas fa-chevron-left'></i>Re-scan my mood</button></p>
+          </Link>
         </div>
         <div className='fluid-container bg-white py-5 px-5 color-primary shadow'>
           <div className='text-center'>
