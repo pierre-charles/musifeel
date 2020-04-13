@@ -2,7 +2,7 @@ import React from 'react'
 import Emoji from 'react-emojis'
 import '../stylesheets/Login.scss'
 
-const encodeURI = encodeURIComponent('https://musifeel.com/home')
+const encodeURI = encodeURIComponent('https://musifeel.com/scan')
 
 const Login = () => {
   return (

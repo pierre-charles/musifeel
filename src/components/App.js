@@ -1,5 +1,5 @@
 import React from 'react';
-import Home from './Home'
+import Scan from './Scan'
 import Login from './Login'
 import Playlists from './Playlists'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
@@ -10,7 +10,7 @@ const App = () => {
     <Router forceRefresh={true}>
       <div>
         <Route path='/' exact component={Login} />
-        <Route path='/home' exact component={Home} />
+        <Route path='/scan' exact component={Scan} />
         <Route path='/playlists' exact component={Playlists} />
       </div>
     </Router>
