@@ -82,7 +82,7 @@ export default class Scan extends Component {
         <div className='container col-lg-7 col-md-7 col-10 bg-light mt-5 mb-5 p-3 shadow'>
           {!this.state.loaded &&
             <div className='text-center my-3'>
-              <p>Loading your camera <i className='ml-2 fas fa-notch fa-spin'></i></p>
+              <p>Loading your camera <i className='ml-2 fas fa-spinner fa-spin'></i></p>
             </div>
           }
           <div className='pt-3 video-container'>
