@@ -30,8 +30,7 @@ export default class Playlists extends Component {
   }
 
   componentDidMount() {
-    // this.getRecentTracks()
-    this.getSpotifyTracks(this.state.range.shortTerm)
+    this.getRecentTracks()
   }
 
   togglePopup = () => {
@@ -46,36 +45,44 @@ export default class Playlists extends Component {
 
   getRecentTracks = async () => {
     this.setState({ activeTab: 'recent' })
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=50`, {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+    try {
+      const apiCall = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=50`, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+        }
+      })
+      const response = await apiCall.json()
+      this.setState({ recent: response.items })
+      const recentTracks = this.state.recent
+      const ids = new Set()
+      for (let j = 0; j < Object.keys(recentTracks).length; j++) {
+        ids.add(recentTracks[j].track.id)
       }
-    })
-    const response = await apiCall.json()
-    this.setState({ recent: response.items })
-    const recentTracks = this.state.recent
-    const ids = new Set()
-    for (let j = 0; j < Object.keys(recentTracks).length; j++) {
-      ids.add(recentTracks[j].track.id)
+      this.getAudioFeature([...ids])
+    } catch (err) {
+      alert('Ooops, something has happened...', err.message)
     }
-    this.getAudioFeature([...ids])
   }
 
   getSpotifyTracks = async (timerange) => {
     this.setState({ activeTab: timerange })
-    const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=50`, {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+    try {
+      const apiCall = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timerange}&limit=50`, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+        }
+      })
+      const response = await apiCall.json()
+      const ids = []
+      this.setState({ results: response.items })
+      const topTracks = this.state.results
+      for (let i = 0; i < Object.keys(topTracks).length; i++) {
+        ids.push(topTracks[i].id)
       }
-    })
-    const response = await apiCall.json()
-    let ids = []
-    this.setState({ results: response.items })
-    const topTracks = this.state.results
-    for (let i = 0; i < Object.keys(topTracks).length; i++) {
-      ids.push(topTracks[i].id)
+      this.getAudioFeature(ids)
+    } catch (err) {
+      alert('Ooops, something has happened...', err.message)
     }
-    this.getAudioFeature(ids)
   }
 
   getAudioFeature = async (ids) => {
