@@ -1,8 +1,5 @@
 # musifeel
 
-Most up to date repository can be found at https://github.com/Pierre-Charles/musifeel
-
-- [musifeel](#musifeel)
   - [Running online](#running-online)
   - [Running locally](#running-locally)
   - [Quick summary](#quick-summary)
