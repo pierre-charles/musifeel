@@ -8,10 +8,6 @@ export default class Scan extends Component {
     super(props)
     this.video = React.createRef();
     this.canvas = React.createRef();
-    const hash = window.location.hash.substr(1).split('&')
-    const hashDecompose = hash[0].split('=')
-    const access_token = hashDecompose[1]
-    localStorage.setItem('accessToken', access_token)
     this.state = {
       loaded: false,
       emotion: 'unknown',
