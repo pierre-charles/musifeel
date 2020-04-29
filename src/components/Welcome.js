@@ -49,7 +49,7 @@ export default class Welcome extends Component {
               </div>
               <div className='col-md-4 col-sm-12 pb-3'>
                 <h1><Emoji emoji="red-heart" /></h1>
-                <p className='pt-2'>Click to save your playlists</p>
+                <p className='pt-2'>Click on the hearts to save your playlists</p>
               </div>
             </div>
             <Link to={{ pathname: `/scan` }}>
