@@ -27,3 +27,9 @@ h1.welcome-title {
     font-size: 23px;
   }
 }
+
+p {
+  @media (max-width: 725px) {
+    font-size: 14px;
+  }
+}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../stylesheets/Login.scss'
 import { Link } from 'react-router-dom'
+import Emoji from 'react-emojis'
 import '../stylesheets/Welcome.scss'
 
 export default class Welcome extends Component {
@@ -32,22 +33,22 @@ export default class Welcome extends Component {
 
   render() {
     return (
-      <div className='container'>
+      <div className='container py-5'>
         {this.state.name && <div className='text-center text-white'>
           <div className='m-5'>
-            <h1 className='pb-3 welcome-title'>Hello {this.state.name[0]}, welcome to musifeel</h1>
+            <h1 className='pb-3 welcome-title'><Emoji emoji="waving-hand" /> Hello {this.state.name[0]}, welcome to musifeel</h1>
             <p className='mx-5 mb-5'>Just a reminder... This app uses your webcam to scan your face to detect your mood.</p>
             <div className='row m-5'>
               <div className='col-md-4 col-sm-12 pb-3'>
-                <i className='fas fa-mouse-pointer fa-2x'></i>
-                <p className='pt-2'>Hover over a song to listen to a preview</p>
+                <h1><Emoji emoji="computer-mouse" /></h1>
+                <p className='pt-2'>Hover over a song to hear a preview</p>
               </div>
               <div className='col-md-4 col-sm-12 pb-3'>
-                <i className='fas fa-hand-pointer fa-2x'></i>
+                <h1><Emoji emoji="backhand-index-pointing-up" /></h1>
                 <p className='pt-2'>Click on a song to find it on Spotify</p>
               </div>
               <div className='col-md-4 col-sm-12 pb-3'>
-                <i className='fas fa-heart fa-2x'></i>
+                <h1><Emoji emoji="red-heart" /></h1>
                 <p className='pt-2'>Click to save your playlists</p>
               </div>
             </div>
