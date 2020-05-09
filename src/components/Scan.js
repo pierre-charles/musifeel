@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import MoodButton from './MoodButton'
 import * as faceapi from 'face-api.js';
 import '../stylesheets/Scan.scss'
-import MoodButton from './MoodButton'
 
 export default class Scan extends Component {
   constructor(props) {

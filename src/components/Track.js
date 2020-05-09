@@ -18,6 +18,6 @@ export default function Track(props) {
           <p className='h6 m-0 color-tertiary'>{props.artist}</p>
         </div>
       </div>
-    </div >
+    </div>
   )
 }

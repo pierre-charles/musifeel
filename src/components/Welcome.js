@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import '../stylesheets/Login.scss'
 import { Link } from 'react-router-dom'
 import Emoji from 'react-emojis'
+import '../stylesheets/Login.scss'
 import '../stylesheets/Welcome.scss'
 
 export default function Welcome(props) {
