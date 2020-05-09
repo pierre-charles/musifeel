@@ -22,9 +22,9 @@ const MoodButton = props => {
     <div className='text-center my-3'>
       <p>Your mood is: {props.emotion}</p>
       <div className='h2'>
+        {props.emotion === 'neutral' && <Emoji emoji={emojis.neutral} />}
         {props.emotion === 'happy' && <Emoji emoji={emojis.happy} />}
         {props.emotion === 'sad' && <Emoji emoji={emojis.sad} />}
-        {props.emotion === 'neutral' && <Emoji emoji={emojis.neutral} />}
         {props.emotion === 'angry' && <Emoji emoji={emojis.angry} />}
         {props.emotion === 'surprised' && <Emoji emoji={emojis.surprised} />}
         {props.emotion === 'fearful' && <Emoji emoji={emojis.fearful} />}
