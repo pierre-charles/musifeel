@@ -30,7 +30,7 @@ export default class Playlists extends Component {
   }
 
   componentDidMount() {
-    this.getRecentTracks()
+    this.getSpotifyTracks(this.state.range.shortTerm)
   }
 
   togglePopup = () => {
