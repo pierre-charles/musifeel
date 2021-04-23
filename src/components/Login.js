@@ -2,7 +2,7 @@ import React from 'react'
 import Emoji from 'react-emojis'
 import '../stylesheets/Login.scss'
 
-const encodeURI = encodeURIComponent('https://musifeel.com/welcome')
+const encodeURI = encodeURIComponent('https://musifeel.netlify.app/welcome')
 
 const Login = () => {
   return (
